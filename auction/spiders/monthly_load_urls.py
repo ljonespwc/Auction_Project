@@ -73,4 +73,3 @@ for x in range(1,pages):
     
     connection.commit()
 c.close()
-print("Hello Lance")
