@@ -78,6 +78,7 @@ class AuctionSpider(scrapy.Spider):
                         new_listing_detail = ' '.join(nums)
                         mileage = int(float(new_listing_detail.split()[0].replace(',','').replace('k','000').replace('K','000')))
                     except:
+                        mileage = 0
                         pass
                 else:
                     mileage = 999999
