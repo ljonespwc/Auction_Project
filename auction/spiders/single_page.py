@@ -17,7 +17,7 @@ class AuctionSpider(scrapy.Spider):
     
     def start_requests(self):
         yield scrapy.Request(
-            url='https://bringatrailer.com/listing/1997-acura-integra-2/',
+            url='https://bringatrailer.com/listing/1929-packard-640-custom-eight-club-sedan/',
             meta={'delay_request_by': 2},
             callback=self.parse)
 

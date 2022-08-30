@@ -8,15 +8,6 @@ from scrapy.selector import Selector
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-# import selenium
-# import time
-# import datetime
-# import re as regex
-# from re import sub
-# from decimal import Decimal
-# from scrapy.shell import inspect_response
-# from selenium.webdriver.common.keys import Keys
-# from selenium.webdriver.common.action_chains import ActionChains
 
 
 connection = sqlite3.connect("auction.db")
@@ -25,7 +16,7 @@ c = connection.cursor()
 url = "https://bringatrailer.com/wp-json/bringatrailer/1.0/data/keyword-filter"
 querystring = {"page": "1", "range": "30D", "sort": "td", "results": "items"}
 
-# May need to replace header and the one below using Insomnia tool
+# IMPORTANT: May need to replace header and the one below using Insomnia tool
 headers = {
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:103.0) Gecko/20100101 Firefox/103.0",
     "Accept": "application/json",
@@ -69,7 +60,7 @@ for x in range(1,pages):
         listing_url = item['url']
         try:
             if c.execute('''INSERT OR IGNORE INTO bat_pages (url,scraped) VALUES(?,0)''', (listing_url,)):
-                print("Record inserted successfully")
+                print("Record inserted successfully!")
                 connection.commit()
         except sqlite3.OperationalError as error:
             print("Failed to update table", error)
