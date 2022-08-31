@@ -2,6 +2,7 @@ import scrapy
 import datetime
 import re as regex
 from re import sub
+from scrapy.crawler import CrawlerProcess
 
 
 class SinglePageSpider(scrapy.Spider):
@@ -89,3 +90,8 @@ class SinglePageSpider(scrapy.Spider):
                 print("details: " + details)
                 print("manual: " + manual)
                 print("mileage: " + str(mileage))
+
+
+process = CrawlerProcess()
+process.crawl(SinglePageSpider)
+process.start()

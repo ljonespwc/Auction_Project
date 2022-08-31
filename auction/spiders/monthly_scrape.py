@@ -9,6 +9,7 @@ from re import sub
 from decimal import Decimal
 from scrapy.selector import Selector
 from scrapy.shell import inspect_response
+from scrapy.crawler import CrawlerProcess
 
 
 class AuctionSpider(scrapy.Spider):
@@ -109,3 +110,8 @@ class AuctionSpider(scrapy.Spider):
                     'manual': manual,
                     'mileage': mileage
                 }
+
+
+process = CrawlerProcess()
+process.crawl(AuctionSpider)
+process.start()
