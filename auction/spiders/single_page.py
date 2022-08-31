@@ -1,17 +1,10 @@
-from urllib import response
-from urllib.request import Request
 import scrapy
-import sqlite3
-import time
 import datetime
 import re as regex
 from re import sub
-from decimal import Decimal
-from scrapy.selector import Selector
-from scrapy.shell import inspect_response
 
 
-class AuctionSpider(scrapy.Spider):
+class SinglePageSpider(scrapy.Spider):
     name = 'single'
     start_urls = []
     
