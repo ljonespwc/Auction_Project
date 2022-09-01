@@ -3,7 +3,7 @@ import sqlite3
 
 
 app = Flask(__name__)
-db_locale = 'auction.db'
+db_locale = './auction.db'
 
 @app.route('/')
 @app.route('/home')
