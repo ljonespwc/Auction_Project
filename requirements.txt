@@ -75,7 +75,7 @@ scrapy-selenium==0.0.7
 scrapy-user-agents==0.1.1
 selenium==3.141.0
 service-identity==18.1.0
-setuptools==61.2.0
+setuptools==65.3.0
 six==1.16.0
 soupsieve==2.3.2.post1
 sqlite-web==0.4.0
