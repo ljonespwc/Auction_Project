@@ -1,4 +1,3 @@
-# from flask import Flask, render_template
 from flask import Blueprint, render_template
 import sqlite3
 
