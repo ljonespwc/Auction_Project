@@ -1,13 +1,13 @@
-from flask import Flask, render_template
+# from flask import Flask, render_template
+from flask import Blueprint, render_template
 import sqlite3
 
 
-app = Flask(__name__)
-db_locale = './auction.db'
+views = Blueprint('views', __name__)
+db_locale = 'auction.db'
 
-@app.route('/')
-@app.route('/home')
-def home_page():
+@views.route('/')
+def home():
     listing_data = query_auction_db()
     return render_template('home.html', listing_data=listing_data)
 
@@ -24,6 +24,3 @@ def query_auction_db():
     listing_data = c.fetchall()
     c.close()
     return listing_data
-
-if __name__ == '__main__':
-    app.run()

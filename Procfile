@@ -1,1 +1,1 @@
-web: gunicorn app:app --chdir auction
+web: gunicorn main:app
