@@ -1,44 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>AuctionTracker</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
-        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
-    </head>
-    <body>
+{% extends "base.html" %}
+{% block title %}AuctionTracker Home{% endblock %}
 
-        <div class="container-lg my-4"> 
-            <div class="p-5 mb-4 bg-light border rounded-3">
-                <h1>Tracking the results of 83,485 online auto auctions.</h1>
-                <p class="lead">You will love what we have for you.</p>
-            </div>
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th scope="col">Model Year</th>
-                    <th scope="col">Model Name</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">Completion Date</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for listing in listing_data %}
-                <tr>
-                    <th scope="row">{{ listing[0]}}</th>
-                    <td>{{ listing[1]}}</td>
-                    <td>{{ listing[2]}}</td>
-                    <td>{{ listing[3]}}</td>
-                    <td>{{ listing[4]}}</td>
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
-    </body>
-</html>
+{% block content %}
+<div class="container-lg my-4"> 
+    <div class="p-5 mb-4 bg-light border rounded-3">
+        <h1>Tracking the results of 83,485 online auto auctions.</h1>
+        <p class="lead">You will love what we have for you.</p>
+    </div>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Model Year</th>
+            <th scope="col">Model Name</th>
+            <th scope="col">Status</th>
+            <th scope="col">Price</th>
+            <th scope="col">Completion Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for listing in listing_data %}
+        <tr>
+            <th scope="row">{{ listing[0]}}</th>
+            <td>{{ listing[1]}}</td>
+            <td>{{ listing[2]}}</td>
+            <td>{{ listing[3]}}</td>
+            <td>{{ listing[4]}}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
