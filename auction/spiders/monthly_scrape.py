@@ -9,7 +9,6 @@ from re import sub
 from decimal import Decimal
 from scrapy.selector import Selector
 from scrapy.shell import inspect_response
-from scrapy.crawler import CrawlerProcess
 
 
 class AuctionSpider(scrapy.Spider):
@@ -32,7 +31,6 @@ class AuctionSpider(scrapy.Spider):
         self.c.close()
 
     def parse(self, response):
-
         make = response.xpath("//strong[contains(text(),'Make')]/text()//following::text()[1]").get()
         if response.xpath("//strong[contains(text(),'Model')]/text()//following::text()[1]").get():
             model_name = response.xpath("//strong[contains(text(),'Model')]/text()//following::text()[1]").get()
@@ -110,8 +108,3 @@ class AuctionSpider(scrapy.Spider):
                     'manual': manual,
                     'mileage': mileage
                 }
-
-
-process = CrawlerProcess()
-process.crawl(AuctionSpider)
-process.start()

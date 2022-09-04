@@ -12,7 +12,6 @@ BOT_NAME = 'auction'
 SPIDER_MODULES = ['auction.spiders']
 NEWSPIDER_MODULE = 'auction.spiders'
 
-
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 # USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.5 Safari/605.1.15'
 
