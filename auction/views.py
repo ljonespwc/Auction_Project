@@ -21,7 +21,7 @@ def query_auction_db():
     c = connection.cursor()
     try:
         c.execute('''
-                  SELECT model_year, model_name, status, price, completion_date FROM listings WHERE make = "Porsche" AND status = "Sold" ORDER BY completion_date DESC
+                  SELECT model_year, model_name, status, price, completion_date FROM listings WHERE make = 'Porsche' AND status = 'Sold' ORDER BY completion_date DESC
                   ''')
     except psycopg2.OperationalError as error:
         print("Failed to query table", error)
