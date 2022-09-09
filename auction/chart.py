@@ -8,7 +8,8 @@ chart = Blueprint('chart', __name__)
 @chart.route('/chart')
 def draw_chart():
     
-    DATABASE_URI = 'postgresql+psycopg2://postgres:Porsche911@localhost:5432/postgres'
+    # DATABASE_URI = 'postgresql+psycopg2://postgres:Porsche911@localhost:5432/postgres'
+    DATABASE_URI = 'postgresql+psycopg2://anoedcsrcyzdwc:73428c28718f0b02a4d004d3e535d5ed9b9309e80d9cf5f5b5790830ced3e308@ec2-44-207-126-176.compute-1.amazonaws.com:5432/dc0snn24f0j4l0'
     engine = create_engine(DATABASE_URI)
     dbConnection = engine.connect()
     
