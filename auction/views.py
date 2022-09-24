@@ -11,10 +11,10 @@ def home():
 
 def query_auction_db():
     # Connection details
-    hostname = 'ec2-44-207-126-176.compute-1.amazonaws.com'
-    username = 'anoedcsrcyzdwc'
-    password = '73428c28718f0b02a4d004d3e535d5ed9b9309e80d9cf5f5b5790830ced3e308'
-    database = 'dc0snn24f0j4l0'
+    hostname = 'ec2-44-207-253-50.compute-1.amazonaws.com'
+    username = 'nmpxbgxicmkrgk'
+    password = 'ed76e45376c92c973583cde1eecb086a2f77fcb1a4135415335cc127872251b5'
+    database = 'dc0erd4bgg1qem'
     
     connection = psycopg2.connect(host=hostname, user=username, password=password, dbname=database)
     c = connection.cursor()
