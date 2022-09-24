@@ -9,8 +9,6 @@ chart = Blueprint('chart', __name__)
 @chart.route('/chart')
 def draw_chart():
     
-    # DATABASE_URI = 'postgresql+psycopg2://postgres:Porsche911@localhost:5432/postgres'
-    # DATABASE_URI = 'postgresql+psycopg2://nmpxbgxicmkrgk:PASSWORD@ec2-44-207-253-50.compute-1.amazonaws.com:5432/dc0erd4bgg1qem' # removed password
     DATABASE_URI = os.getenv("DATABASE_URI")
     
     engine = create_engine(DATABASE_URI)
