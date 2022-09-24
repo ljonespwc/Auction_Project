@@ -2,29 +2,61 @@
 {% block title %}AuctionTracker Chart{% endblock %}
 
 {% block content %}
-<canvas id="myChart" width="400" height="400"></canvas>
+<canvas id="myChart"></canvas>
 <script>
-  // Get the context of the canvas element we want to select
-  var ctx = document.getElementById("myChart").getContext("2d");
 
   var auctionyear = {{auctionyear|safe}};
   var price = {{price|safe}};
 
-  var data = {
-      labels: auctionyear,
-      datasets: [
-          {
-              label: "Porsche 911 GT3 Prices",
-              fillColor: "rgba(220,220,220,0.2)",
-              strokeColor: "rgba(220,220,220,1)",
-              pointColor: "rgba(220,220,220,1)",
-              pointStrokeColor: "#fff",
-              pointHighlightFill: "#fff",
-              pointHighlightStroke: "rgba(220,220,220,1)",
-              data: price
-          },
-      ]
+  const labels = auctionyear;
+
+  const data = {
+    labels: auctionyear,
+    datasets: [
+        {
+          label: "Porsche 911 GT3 Prices",
+          data: price,
+          fill: true,
+          borderColor: 'rgb(75, 192, 192)',
+          borderWidth: 5,
+          tension: 0.2
+        }
+    ]
   };
-  var myLineChart = new Chart(ctx).Line(data);
+
+  const config = {
+    type: 'line',
+    data: data,
+    options: {
+      responsive: true,
+      scales: {
+        x: {
+          grid: {
+            display: false,
+            drawTicks: true
+          }
+        },
+        y: {
+            grid: {
+              display: false,
+              drawTicks: true
+            },
+            ticks: {
+                // Include a dollar sign in the ticks
+                callback: function(value, index, ticks) {
+                    return '$' + value;
+                }
+            }
+        }
+      }
+    }
+  };
+</script>
+
+<script>
+  const myChart = new Chart(
+    document.getElementById('myChart'),
+    config
+  );
 </script>
 {% endblock %}
