@@ -7,27 +7,5 @@
         <h1>Tracking the results of 83,485 online auto auctions.</h1>
         <p class="lead">You will love what we have for you.</p>
     </div>
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th scope="col">Model Year</th>
-            <th scope="col">Model Name</th>
-            <th scope="col">Status</th>
-            <th scope="col">Price</th>
-            <th scope="col">Completion Date</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for listing in listing_data %}
-        <tr>
-            <th scope="row">{{ listing[0]}}</th>
-            <td>{{ listing[1]}}</td>
-            <td>{{ listing[2]}}</td>
-            <td>{{ listing[3]}}</td>
-            <td>{{ listing[4]}}</td>
-        </tr>
-        {% endfor %}
-        </tbody>
-    </table>
 </div>
 {% endblock %}
