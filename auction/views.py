@@ -1,30 +1,36 @@
-from flask import Blueprint, render_template
+import pandas as pd
 import psycopg2
+import os
+from flask import Flask, Blueprint, render_template
+from sqlalchemy import create_engine
 
 
 views = Blueprint('views', __name__)
 
 @views.route('/')
 def home():
-    listing_data = query_auction_db()
-    return render_template('home.html', listing_data=listing_data)
+    return render_template('home.html')
 
-def query_auction_db():
-    # Connection details
-    hostname = 'ec2-44-207-253-50.compute-1.amazonaws.com'
-    username = 'nmpxbgxicmkrgk'
-    password = 'ed76e45376c92c973583cde1eecb086a2f77fcb1a4135415335cc127872251b5'
-    database = 'dc0erd4bgg1qem'
-    
-    connection = psycopg2.connect(host=hostname, user=username, password=password, dbname=database)
-    c = connection.cursor()
-    try:
-        c.execute('''
-                  SELECT model_year, model_name, status, price, completion_date FROM listings WHERE make = 'Porsche' AND status = 'Sold' ORDER BY completion_date DESC
-                  ''')
-    except psycopg2.OperationalError as error:
-        print("Failed to query table", error)
-        pass
-    listing_data = c.fetchall()
-    c.close()
-    return listing_data
+@views.route('/chart')
+def draw_chart():
+    dbConnection = db_connect()
+    df = pd.read_sql("""
+                        select extract(year from completion_date) AS auctionyear,
+                        percentile_cont(0.50) within group (order by price) as price
+                        from listings
+                        where make = 'Porsche' and status = 'Sold'
+                        group by make, auctionyear
+                        order by auctionyear ASC
+                    """, dbConnection)
+
+    auctionyear = df['auctionyear'].astype(int).values.tolist() # x-axis
+    price = df['price'].values.astype(int).tolist() # y-axis
+
+    dbConnection.close()
+    return render_template('chart.html', auctionyear=auctionyear, price=price)
+
+def db_connect():
+    DATABASE_URI = os.getenv("DATABASE_URI")
+    engine = create_engine(DATABASE_URI)
+    connection = engine.connect()
+    return connection
