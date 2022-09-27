@@ -7,5 +7,21 @@
         <h1>Tracking the results of {{ listings }} online auto auctions.</h1>
         <p class="lead">Get detailed pricing charts for {{ makes }} vehicle makes and {{ models }} models. Last updated September 30, 2022.</p>
     </div>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Vehicle Make</th>
+            <th scope="col">Completed Auctions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for index, row in df_listing_data.iterrows() %}
+        <tr>
+            <th scope="row"><a href = "chart?make={{ row["make"] }}">{{ row["make"] }}</a></th>
+            <td>{{ row["count"] }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 </div>
 {% endblock %}

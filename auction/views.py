@@ -13,25 +13,31 @@ def home():
     session = db_connect()
     
     df_listings = pd.read_sql("""
-                        select count(*) AS listings
-                        from listings
+                        SELECT COUNT(*) AS listings
+                        FROM listings
                     """, session.connection())
     listings = df_listings['listings'].item()
     
     df_makes = pd.read_sql("""
-                        select count(*) AS makes
-                        from makes
+                        SELECT COUNT(*) AS makes
+                        FROM makes
                     """, session.connection())
     makes = df_makes['makes'].item()
     
     df_models = pd.read_sql("""
-                        select count(*) AS models
-                        from models
+                        SELECT COUNT(*) AS models
+                        FROM models
                     """, session.connection())
     models = df_models['models'].item()
+    
+    df_listing_data = pd.read_sql("""
+                        SELECT makes.make, COUNT(*) FROM listings
+                        INNER JOIN makes ON listings.make = makes.make
+                        GROUP BY makes.make_id ORDER BY make ASC
+                    """, session.connection())
 
     session.close()
-    return render_template('home.html', listings=listings, makes=makes, models=models)
+    return render_template('home.html', listings=listings, makes=makes, models=models, df_listing_data=df_listing_data)
 
 @views.route('/chart')
 def draw_chart():
