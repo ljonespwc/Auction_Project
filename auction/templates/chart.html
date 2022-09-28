@@ -86,4 +86,22 @@
     config
   );
 </script>
+<div class="container-lg my-4"> 
+  <table class="table table-striped">
+    <thead>
+    <tr>
+        <th scope="col">Auction Year</th>
+        <th scope="col">Completed Auctions</th>
+    </tr>
+    </thead>
+    <tbody>
+      {% for item in supporting_data %}
+      <tr>
+          <th scope="row">{{ item[0] }}</th>
+          <td>{{ item[1] }}</td>
+      </tr>
+      {% endfor %}
+      </tbody>
+  </table>
+</div>
 {% endblock %}

@@ -46,6 +46,7 @@ def draw_chart():
     
     df = pd.read_sql("""
                         select extract(year from completion_date) AS auctionyear,
+                        count(*) as listingcount,
                         percentile_cont(0.50) within group (order by price) as price
                         from listings
                         where make = '%s' and status = 'Sold'
@@ -53,11 +54,12 @@ def draw_chart():
                         order by auctionyear ASC
                     """ % make, session.connection())
 
-    auctionyear = df['auctionyear'].astype(int).values.tolist() # x-axis
-    price = df['price'].values.astype(int).tolist() # y-axis
+    auctionyear = df['auctionyear'].astype(int).values.tolist() # chart x-axis
+    price = df['price'].values.astype(int).tolist() # chart y-axis
+    supporting_data = df.reset_index()[['auctionyear', 'listingcount']].values.astype(int).tolist()
 
     session.close()
-    return render_template('chart.html', make=make, auctionyear=auctionyear, price=price)
+    return render_template('chart.html', make=make, auctionyear=auctionyear, price=price, supporting_data=supporting_data)
 
 def db_connect():
     DATABASE_URI = os.getenv("DATABASE_URI")
