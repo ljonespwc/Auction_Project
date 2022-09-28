@@ -49,7 +49,7 @@ def draw_chart():
                         count(*) as listingcount,
                         percentile_cont(0.50) within group (order by price) as price
                         from listings
-                        where make = '%s' and status = 'Sold'
+                        where make = '%s' and status = 'Sold' and extract(year from completion_date) <> 2014
                         group by make, auctionyear
                         order by auctionyear ASC
                     """ % make, session.connection())
