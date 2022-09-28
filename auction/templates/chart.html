@@ -7,7 +7,7 @@
 
   var auctionyear = {{auctionyear|safe}};
   var price = {{price|safe}};
-  var model_name = {{model_name|tojson}};
+  var make = {{make|tojson}};
 
   const labels = auctionyear;
 
@@ -15,7 +15,7 @@
     labels: auctionyear,
     datasets: [
         {
-          label: model_name,
+          label: make,
           data: price,
           fill: true,
           borderColor: 'rgb(75, 192, 192)',

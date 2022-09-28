@@ -1,7 +1,7 @@
 import pandas as pd
 import psycopg2
 import os
-from flask import Flask, Blueprint, render_template
+from flask import Flask, Blueprint, render_template, request
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
@@ -42,22 +42,22 @@ def home():
 @views.route('/chart')
 def draw_chart():
     session = db_connect()
+    make = request.args.get('make')
     
     df = pd.read_sql("""
                         select extract(year from completion_date) AS auctionyear,
                         percentile_cont(0.50) within group (order by price) as price
                         from listings
-                        where make = 'Porsche' and status = 'Sold' and model_name = 'Porsche 911 GT3'
+                        where make = '%s' and status = 'Sold'
                         group by make, auctionyear
                         order by auctionyear ASC
-                    """, session.connection())
+                    """ % make, session.connection())
 
-    model_name = 'Porsche 911 GT3'
     auctionyear = df['auctionyear'].astype(int).values.tolist() # x-axis
     price = df['price'].values.astype(int).tolist() # y-axis
 
     session.close()
-    return render_template('chart.html', model_name=model_name, auctionyear=auctionyear, price=price)
+    return render_template('chart.html', make=make, auctionyear=auctionyear, price=price)
 
 def db_connect():
     DATABASE_URI = os.getenv("DATABASE_URI")
