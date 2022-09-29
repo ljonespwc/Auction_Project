@@ -7,7 +7,11 @@
 
   var auctionyear = {{auctionyear|safe}};
   var price = {{price|safe}};
+  {% if model %}
+  var make = {{model|tojson}};
+  {% else %}
   var make = {{make|tojson}};
+  {% endif %}
 
   const labels = auctionyear;
 
@@ -86,6 +90,16 @@
     config
   );
 </script>
+<div class="container-lg my-4">
+  <form>
+    <label for="model">Choose a specific {{ make }} to graph:</label><p><p>
+    <select name="model" id="model" onchange="document.location.href = 'chart?make={{ make }}&model=' + this.value">
+    {% for model_name in dropdown_data %}
+    <option value="{{ model_name }}">{{ model_name }}</option>
+    {% endfor %}
+    </select>
+  </form>
+</div>
 <div class="container-lg my-4"> 
   <table class="table table-striped">
     <thead>
