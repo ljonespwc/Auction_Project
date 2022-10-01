@@ -101,7 +101,11 @@
     </select>
   </form>
 </div>
-<div class="container-lg my-4"> 
+<div class="container-lg my-4">
+  {% if model %}
+  Price change since {{ supporting_data[0][0] }}: {% if increase > 0 %}+{% else %}{% endif %}{{ increase }}%<p>
+  Rank: #{{ increase_rank }} of 457 models<p>
+  {% endif %}
   <table class="table table-striped">
     <thead>
     <tr>

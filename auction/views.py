@@ -87,9 +87,19 @@ def draw_chart():
         auctionyear = df['auctionyear'].astype(int).values.tolist() # chart x-axis
         price = df['price'].values.astype(int).tolist() # chart y-axis
         supporting_data = df.reset_index()[['auctionyear', 'listingcount']].values.astype(int).tolist()
+        
+        df_rankings = pd.read_sql("""
+                            SELECT increase, increase_rank
+                            FROM rankings
+                            WHERE model_name = '%s'
+                            """ % model, session.connection())
+        increase = df_rankings['increase'].item()
+        increase_rank = df_rankings['increase_rank'].item()
+    
         session.close()
         return render_template('chart.html', make=make, model=model, auctionyear=auctionyear, price=price,
-                               supporting_data=supporting_data, dropdown_data=dropdown_data)
+                               supporting_data=supporting_data, dropdown_data=dropdown_data, increase=increase,
+                               increase_rank=increase_rank)
 
 def db_connect():
     DATABASE_URI = os.getenv("DATABASE_URI")
