@@ -52,6 +52,12 @@ def draw_chart():
                             """ % make, session.connection())
     dropdown_data = df_dropdown.reset_index()['model_name'].values.tolist()
     
+    df_models_num = pd.read_sql("""
+                        SELECT COUNT(*) AS models
+                        FROM models
+                    """, session.connection())
+    models_num = df_models_num['models'].item()
+    
     if not request.args.get('model'): # if make is selected from home page, show make data
         
         df = pd.read_sql("""
@@ -89,17 +95,22 @@ def draw_chart():
         supporting_data = df.reset_index()[['auctionyear', 'listingcount']].values.astype(int).tolist()
         
         df_rankings = pd.read_sql("""
-                            SELECT increase, increase_rank
+                            SELECT increase, increase_rank, views, views_rank, comments, comments_rank
                             FROM rankings
                             WHERE model_name = '%s'
                             """ % model, session.connection())
         increase = df_rankings['increase'].item()
         increase_rank = df_rankings['increase_rank'].item()
+        views = df_rankings['views'].item()
+        views_rank = df_rankings['views_rank'].item()
+        comments = df_rankings['comments'].item()
+        comments_rank = df_rankings['comments_rank'].item()
     
         session.close()
         return render_template('chart.html', make=make, model=model, auctionyear=auctionyear, price=price,
                                supporting_data=supporting_data, dropdown_data=dropdown_data, increase=increase,
-                               increase_rank=increase_rank)
+                               increase_rank=increase_rank, views=views, views_rank=views_rank, comments=comments,
+                               comments_rank=comments_rank, models_num=models_num)
 
 def db_connect():
     DATABASE_URI = os.getenv("DATABASE_URI")
