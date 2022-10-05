@@ -3,13 +3,17 @@
 
 {% block content %}
 <canvas id="myChart"></canvas>
+<script>
+  var showDataManual = false;
+  var showDataLow = false;
+</script>
 
 {% if model %}
   {% if listings_manual > 25 %}
-    <button onclick="addDatasetManual()">Manual transmission only</button>
+    <button onclick="addDatasetManual()">Manual transmission</button>
   {% endif %}
   {% if listings_low_mileage > 25 %}
-    <button onclick="addDatasetLow()">Low mileage only</button>
+    <button onclick="addDatasetLow()">Low mileage</button>
   {% endif %}
 {% endif %}
 
@@ -114,7 +118,8 @@
       tension: 0.2
     };
     myChart.data.datasets.push(newDataset);
-    myChart.update();
+    if (showDataManual == false) { myChart.update(); }
+    showDataManual = true;
   };
 
   function addDatasetLow(){
@@ -127,7 +132,8 @@
       tension: 0.2
     };
     myChart.data.datasets.push(newDataset1);
-    myChart.update();
+    if (showDataLow == false) { myChart.update(); }
+    showDataLow = true;
   };
 </script>
 <div class="container-lg my-4">
