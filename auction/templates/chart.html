@@ -117,8 +117,10 @@
       borderWidth: 5,
       tension: 0.2
     };
-    myChart.data.datasets.push(newDataset);
-    if (showDataManual == false) { myChart.update(); }
+    if (showDataManual == false) {
+      myChart.data.datasets.push(newDataset);
+      myChart.update();
+    }
     showDataManual = true;
   };
 
@@ -131,8 +133,10 @@
       borderWidth: 5,
       tension: 0.2
     };
-    myChart.data.datasets.push(newDataset1);
-    if (showDataLow == false) { myChart.update(); }
+    if (showDataLow == false) {
+      myChart.data.datasets.push(newDataset1);
+      myChart.update();
+    }
     showDataLow = true;
   };
 </script>
