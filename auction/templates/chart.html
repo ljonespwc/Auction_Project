@@ -4,11 +4,25 @@
 {% block content %}
 <canvas id="myChart"></canvas>
 
+{% if model %}
+  {% if listings_manual > 25 %}
+    <button onclick="addDatasetManual()">Manual transmission only</button>
+  {% endif %}
+  {% if listings_low_mileage > 25 %}
+    <button onclick="addDatasetLow()">Low mileage only</button>
+  {% endif %}
+{% endif %}
+
 <script>
   var auctionyear = {{auctionyear|safe}};
   var price = {{price|safe}};
+
   {% if model %}
   var make = {{model|tojson}};
+  var auctionyear_manual = {{auctionyear_manual|safe}};
+  var price_manual = {{price_manual|safe}};
+  var auctionyear_low_mileage = {{auctionyear_low_mileage|safe}};
+  var price_low_mileage = {{price_low_mileage|safe}};
   {% else %}
   var make = {{make|tojson}};
   {% endif %}
@@ -21,7 +35,7 @@
         {
           label: make,
           data: price,
-          fill: true,
+          fill: false,
           borderColor: 'rgb(75, 192, 192)',
           borderWidth: 5,
           tension: 0.2
@@ -89,6 +103,32 @@
     document.getElementById('myChart'),
     config
   );
+
+  function addDatasetManual(){
+    const newDataset = {
+      label: 'Manuals Only',
+      data: price_manual,
+      fill: false,
+      borderColor: 'rgb(75, 192, 0)',
+      borderWidth: 5,
+      tension: 0.2
+    };
+    myChart.data.datasets.push(newDataset);
+    myChart.update();
+  };
+
+  function addDatasetLow(){
+    const newDataset1 = {
+      label: 'Low Miles Only',
+      data: price_low_mileage,
+      fill: false,
+      borderColor: 'rgb(75, 0, 192)',
+      borderWidth: 5,
+      tension: 0.2
+    };
+    myChart.data.datasets.push(newDataset1);
+    myChart.update();
+  };
 </script>
 <div class="container-lg my-4">
   <form>
@@ -114,7 +154,7 @@
     <thead>
     <tr>
         <th scope="col">Auction Year</th>
-        <th scope="col">Completed Auctions: {{ model }}</th>
+        <th scope="col">Total Auctions: {{ model }}</th>
     </tr>
     </thead>
     <tbody>

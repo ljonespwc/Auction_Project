@@ -73,6 +73,7 @@ def draw_chart():
         auctionyear = df['auctionyear'].astype(int).values.tolist() # chart x-axis
         price = df['price'].values.astype(int).tolist() # chart y-axis
         supporting_data = df.reset_index()[['auctionyear', 'listingcount']].values.astype(int).tolist()
+        
         session.close()
         return render_template('chart.html', make=make, auctionyear=auctionyear, price=price,
                                supporting_data=supporting_data, dropdown_data=dropdown_data)
@@ -92,8 +93,43 @@ def draw_chart():
 
         auctionyear = df['auctionyear'].astype(int).values.tolist() # chart x-axis
         price = df['price'].values.astype(int).tolist() # chart y-axis
+        
+        # get only the manual transmission listings
+        df_manual = pd.read_sql("""
+                            select extract(year from completion_date) AS auctionyear,
+                            count(*) as listingcount,
+                            percentile_cont(0.50) within group (order by price) as price
+                            from listings
+                            where model_name = '%s' and status = 'Sold' and extract(year from completion_date) <> 2014
+                            and manual = 'Y'
+                            group by model_name, auctionyear
+                            order by auctionyear ASC
+                        """ % model, session.connection())
+
+        listings_manual = sum(df_manual['listingcount'].values.astype(int).tolist())
+        auctionyear_manual = df_manual['auctionyear'].astype(int).values.tolist() # chart x-axis
+        price_manual = df_manual['price'].values.astype(int).tolist() # chart y-axis
+        
+        # get only the low mileage listings
+        df_low_mileage = pd.read_sql("""
+                            select extract(year from completion_date) AS auctionyear,
+                            count(*) as listingcount,
+                            percentile_cont(0.50) within group (order by price) as price
+                            from listings
+                            where model_name = '%s' and status = 'Sold' and extract(year from completion_date) <> 2014
+                            and mileage < 10000
+                            group by model_name, auctionyear
+                            order by auctionyear ASC
+                        """ % model, session.connection())
+
+        listings_low_mileage = sum(df_low_mileage['listingcount'].values.astype(int).tolist())
+        auctionyear_low_mileage = df_low_mileage['auctionyear'].astype(int).values.tolist() # chart x-axis
+        price_low_mileage = df_low_mileage['price'].values.astype(int).tolist() # chart y-axis
+        
+        # to display number of listings per auction year in table
         supporting_data = df.reset_index()[['auctionyear', 'listingcount']].values.astype(int).tolist()
         
+        # get additional details and rankings for above table
         df_rankings = pd.read_sql("""
                             SELECT increase, increase_rank, views, views_rank, comments, comments_rank
                             FROM rankings
@@ -110,7 +146,9 @@ def draw_chart():
         return render_template('chart.html', make=make, model=model, auctionyear=auctionyear, price=price,
                                supporting_data=supporting_data, dropdown_data=dropdown_data, increase=increase,
                                increase_rank=increase_rank, views=views, views_rank=views_rank, comments=comments,
-                               comments_rank=comments_rank, models_num=models_num)
+                               comments_rank=comments_rank, models_num=models_num, auctionyear_manual=auctionyear_manual,
+                               price_manual=price_manual, listings_manual=listings_manual, listings_low_mileage=listings_low_mileage,
+                               auctionyear_low_mileage=auctionyear_low_mileage, price_low_mileage=price_low_mileage)
 
 def db_connect():
     DATABASE_URI = os.getenv("DATABASE_URI")
