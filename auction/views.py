@@ -117,7 +117,7 @@ def draw_chart():
                             percentile_cont(0.50) within group (order by price) as price
                             from listings
                             where model_name = '%s' and status = 'Sold' and extract(year from completion_date) > 2015
-                            and mileage < 10000
+                            and mileage < 20000
                             group by model_name, auctionyear
                             order by auctionyear ASC
                         """ % model, session.connection())
