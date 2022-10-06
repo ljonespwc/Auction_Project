@@ -65,7 +65,7 @@ def draw_chart():
                             count(*) as listingcount,
                             percentile_cont(0.50) within group (order by price) as price
                             from listings
-                            where make = '%s' and status = 'Sold' and extract(year from completion_date) <> 2014
+                            where make = '%s' and status = 'Sold' and extract(year from completion_date) > 2015
                             group by make, auctionyear
                             order by auctionyear ASC
                         """ % make, session.connection())
@@ -86,7 +86,7 @@ def draw_chart():
                             count(*) as listingcount,
                             percentile_cont(0.50) within group (order by price) as price
                             from listings
-                            where model_name = '%s' and status = 'Sold' and extract(year from completion_date) <> 2014
+                            where model_name = '%s' and status = 'Sold' and extract(year from completion_date) > 2015
                             group by model_name, auctionyear
                             order by auctionyear ASC
                         """ % model, session.connection())
@@ -100,7 +100,7 @@ def draw_chart():
                             count(*) as listingcount,
                             percentile_cont(0.50) within group (order by price) as price
                             from listings
-                            where model_name = '%s' and status = 'Sold' and extract(year from completion_date) <> 2014
+                            where model_name = '%s' and status = 'Sold' and extract(year from completion_date) > 2015
                             and manual = 'Y'
                             group by model_name, auctionyear
                             order by auctionyear ASC
@@ -116,7 +116,7 @@ def draw_chart():
                             count(*) as listingcount,
                             percentile_cont(0.50) within group (order by price) as price
                             from listings
-                            where model_name = '%s' and status = 'Sold' and extract(year from completion_date) <> 2014
+                            where model_name = '%s' and status = 'Sold' and extract(year from completion_date) > 2015
                             and mileage < 10000
                             group by model_name, auctionyear
                             order by auctionyear ASC
