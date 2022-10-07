@@ -143,7 +143,7 @@
 <div class="container-lg my-4">
   <form>
     <label for="model">Update chart with a specific {{ make }}:</label><p><p>
-    <select name="model" id="model" onchange="document.location.href = 'chart?make={{ make }}&model=' + this.value">
+    <select name="model" id="model" onchange="document.location.href = 'chart?make={{ make }}&model=' + encodeURIComponent(this.value)">
     <option id="select" value="select" disabled="" selected="">Select a model</option>
     {% for model_name in dropdown_data %}
     <option value="{{ model_name }}">{{ model_name }}</option>

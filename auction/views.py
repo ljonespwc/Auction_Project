@@ -135,6 +135,7 @@ def draw_chart():
                             FROM rankings
                             WHERE model_name = '%s'
                             """ % model, session.connection())
+        
         increase = df_rankings['increase'].item()
         increase_rank = df_rankings['increase_rank'].item()
         views = df_rankings['views'].item()
