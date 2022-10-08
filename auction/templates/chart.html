@@ -79,7 +79,7 @@
         y: {
           title: {
             display: true,
-            text: 'Median Sale Price',
+            text: 'Median Sale Price (USD)',
             padding: 18,
             font: {
               size: 18
@@ -164,7 +164,11 @@
     <thead>
     <tr>
         <th scope="col">Auction Year</th>
-        <th scope="col">Auctions: {{ model }} - All</th>
+        {% if model %}
+          <th scope="col">Auctions: {{ model }} - All</th>
+        {% else %}
+          <th scope="col">Auctions: {{ make }} - All</th>
+        {% endif %}
     </tr>
     </thead>
     <tbody>
