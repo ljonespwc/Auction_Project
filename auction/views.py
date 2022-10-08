@@ -29,6 +29,13 @@ def home():
                         FROM models
                     """, session.connection())
     models = df_models['models'].item()
+
+    session.close()
+    return render_template('home.html', listings=listings, makes=makes, models=models)
+
+@views.route('/makes')
+def list_makes():
+    session = db_connect()
     
     df_listing_data = pd.read_sql("""
                         SELECT makes.make, COUNT(*) FROM listings
@@ -37,7 +44,7 @@ def home():
                     """, session.connection())
 
     session.close()
-    return render_template('home.html', listings=listings, makes=makes, models=models, df_listing_data=df_listing_data)
+    return render_template('makes.html', df_listing_data=df_listing_data)
 
 @views.route('/chart')
 def draw_chart():

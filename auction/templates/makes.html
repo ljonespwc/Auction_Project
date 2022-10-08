@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}AuctionTracker - Makes{% endblock %}
+
+{% block content %}
+<div class="container-lg my-4">
+    <div class="col-md-12">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">Vehicle Make</th>
+                <th scope="col">Completed Auctions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for index, row in df_listing_data.iterrows() %}
+            <tr>
+                <th scope="row"><a href = "chart?make={{ row["make"] }}">{{ row["make"] }}</a></th>
+                <td>{{ row["count"] }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

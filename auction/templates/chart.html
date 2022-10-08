@@ -9,10 +9,10 @@
 </script>
 
 {% if model %}
-  {% if listings_manual > 25 %}
+  {% if auctionyear|length == auctionyear_manual|length %}
     <button onclick="addDatasetManual()">Manual transmission</button>
   {% endif %}
-  {% if listings_low_mileage > 25 %}
+  {% if auctionyear|length == auctionyear_low_mileage|length %}
     <button onclick="addDatasetLow()">Low mileage</button>
   {% endif %}
 {% endif %}
