@@ -29,9 +29,21 @@ def home():
                         FROM models
                     """, session.connection())
     models = df_models['models'].item()
+    
+    df_listing_data = pd.read_sql("""
+                        SELECT TO_CHAR(completion_date, 'YYYY-MM') AS auctionperiod,
+                        percentile_cont(0.50) WITHIN GROUP (ORDER BY price) AS price
+                        FROM listings
+                        WHERE status = 'Sold' AND EXTRACT(year from completion_date) > 2015
+                        GROUP BY auctionperiod
+                        ORDER BY auctionperiod ASC
+                    """, session.connection())
+
+    auctionperiod = df_listing_data['auctionperiod'].values.tolist() # chart x-axis
+    price = df_listing_data['price'].values.astype(int).tolist() # chart y-axis
 
     session.close()
-    return render_template('home.html', listings=listings, makes=makes, models=models)
+    return render_template('home.html', listings=listings, makes=makes, models=models, auctionperiod=auctionperiod, price=price)
 
 @views.route('/makes')
 def list_makes():

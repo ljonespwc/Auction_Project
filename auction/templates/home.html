@@ -4,40 +4,99 @@
 {% block content %}
 <div class="container-lg my-4"> 
     <div class="p-5 mb-4 bg-light border rounded-3">
-        <h1>Tracking the results of {{ listings }} online auto auctions.</h1>
-        <p class="lead">Get detailed pricing charts for {{ makes }} vehicle makes and {{ models }} models. Last updated September 30, 2022.</p>
+        <h1>Tracking {{ listings }} completed auctions from Bring a Trailer.</h1>
+        <p class="lead">Get detailed pricing charts for {{ makes }} vehicle makes and {{ models }} models. Last updated October 16, 2022.</p>
     </div>
+</div>
+
+<canvas id="myChart"></canvas>
+
+<script>
+  var auctionperiod = {{auctionperiod|safe}};
+  var price = {{price|safe}};
+
+  const labels = auctionperiod;
+
+  const data = {
+    labels: auctionperiod,
+    datasets: [
+        {
+          label: 'All BaT Auctions (since 2016-01)',
+          data: price,
+          fill: false,
+          borderColor: 'rgb(75, 192, 192)',
+          borderWidth: 5,
+          tension: 0.5
+        }
+    ]
+  };
+
+  const config = {
+    type: 'line',
+    data: data,
+    options: {
+      plugins: {
+        legend: {
+          labels: {
+            font: {
+              size: 20
+            }
+          }
+        }
+      },
+      responsive: true,
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: 'Auction Month',
+            padding: 10,
+            font: {
+              size: 18
+            }
+          },
+          grid: {
+            display: false,
+            drawTicks: true
+          }
+        },
+        y: {
+          title: {
+            display: true,
+            text: 'Median Sale Price (USD)',
+            padding: 18,
+            font: {
+              size: 18
+            }
+          },
+          grid: {
+            display: false,
+            drawTicks: true
+          },
+          ticks: {
+            // Include a dollar sign in the ticks
+            callback: function(value, index, ticks) {
+              return '$' + value;
+            }
+          }
+        }
+      }
+    }
+  };
+</script>
+
+<script>
+  Chart.defaults.font.size = 14;
+  const myChart = new Chart(
+    document.getElementById('myChart'),
+    config
+  );
+</script>
+
+<div class="container-lg my-4"> 
     <div class="row">
         <div class="col-md-12 text-center">
-            <a href="makes" class="btn btn-lg btn-primary m-5" role="button">See All Makes</a>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="media text-left mt-2 mb-2">
-                Porsche GT3 prices have softened in 2022, even for manuals and low-mileage cars:
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="media text-center">
-                <img src="static/images/GT3.png" class="mt-2 mb-5 img-fluid img-thumbnail rounded" alt="Porsche GT3" />
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="media text-left mt-2 mb-2">
-                The Ferrari 360, especially in manual or with low miles, shows little sign of slowing:
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="media text-center">
-                <img src="static/images/F360.png" class="mt-2 mb-5 img-fluid img-thumbnail rounded" alt="Ferrari F360" />
-            </div>
+            <a href="makes" class="btn btn-lg btn-primary m-5" role="button">Choose a Vehicle Make</a>
         </div>
     </div>
 </div>
