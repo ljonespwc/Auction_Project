@@ -14,6 +14,7 @@
 <script>
   var auctionperiod = {{auctionperiod|safe}};
   var price = {{price|safe}};
+  var listingcount = {{listingcount|safe}};
 
   const labels = auctionperiod;
 
@@ -36,6 +37,14 @@
     data: data,
     options: {
       plugins: {
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              var label = ` Median price: $${context.dataset.data[context.dataIndex]} (based on ${listingcount[context.dataIndex]} listings)`;
+              return label;
+            }
+          }
+        },
         legend: {
           labels: {
             font: {
