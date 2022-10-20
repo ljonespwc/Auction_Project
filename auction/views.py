@@ -4,6 +4,7 @@ import os
 from flask import Flask, Blueprint, render_template, request
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
+from urllib.parse import unquote
 
 
 views = Blueprint('views', __name__)
@@ -47,6 +48,38 @@ def home():
     session.close()
     return render_template('home.html', listings=listings, makes=makes, models=models,
                            auctionperiod=auctionperiod, price=price, listingcount=listingcount)
+
+
+
+
+@views.route('/topmovers')
+def top_movers():
+    session = db_connect()
+    
+    df_increase_data = pd.read_sql("""
+                            select make, model_name, increase, RANK () OVER (ORDER BY increase DESC) increase_rank
+                            FROM
+                            (select distinct make, model_name,
+                                round(cast(((first_value(price) over (partition by model_name order by auctionyear desc) -
+                                    first_value(price) over (partition by model_name order by auctionyear asc)) / 
+                                    first_value(price) over (partition by model_name order by auctionyear asc)
+                                )* 100 as numeric),1) as increase
+                            from (select make, extract(year from completion_date) AS auctionyear,
+                            models.model_name,
+                            percentile_cont(0.50) within group (order by price) as price
+                            from listings INNER JOIN models ON listings.model_name = models.model_name
+                            where status = 'Sold' and extract(year from completion_date) BETWEEN 2021 AND 2022
+                            group by make, models.model_name, auctionyear
+                            order by models.model_name ASC, auctionyear DESC) subquery) subquery1
+                    """, session.connection())
+
+    session.close()
+    return render_template('topmovers.html', df_increase_data=df_increase_data)
+
+
+
+
+
 
 @views.route('/makes')
 def list_makes():
@@ -104,7 +137,8 @@ def draw_chart():
     
     else: # if model is selected from dropdown on chart page, show model data
 
-        model = request.args.get('model')
+        model_temp = request.args.get('model')
+        model = unquote(model_temp)
         df = pd.read_sql("""
                             select extract(year from completion_date) AS auctionyear,
                             count(*) as listingcount,

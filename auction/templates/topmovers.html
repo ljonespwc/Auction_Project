@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}AuctionTracker - Top Movers{% endblock %}
+
+{% block content %}
+<div class="container-lg my-4">
+    <div class="col-md-12">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">Vehicle Model</th>
+                <th scope="col">1-Year Increase</th>
+                <th scope="col">Rank</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for index, row in df_increase_data.iterrows() %}
+            <tr>
+                {% set model = (row["model_name"] | urlencode) %}
+                <th scope="row"><a href = "chart?make={{ row["make"] }}&model={{ model | urlencode }}">{{ row["model_name"] }}</a></th>
+                <td>{{ row["increase"] }}%</td>
+                <td>{{ row["increase_rank"] }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
