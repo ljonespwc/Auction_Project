@@ -174,10 +174,6 @@
   </form>
 </div>
 <div class="container-lg my-4">
-  {% if model %}
-  Price change since {{ supporting_data[0][0] }}: {% if increase > 0 %}+{% else %}{% endif %}{{ increase }}%<br>
-  Rank: #{{ increase_rank }} of {{ models_num }} models<p><p>
-  {% endif %}
   <table class="table table-striped">
     <thead>
     <tr>

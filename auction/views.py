@@ -49,9 +49,6 @@ def home():
     return render_template('home.html', listings=listings, makes=makes, models=models,
                            auctionperiod=auctionperiod, price=price, listingcount=listingcount)
 
-
-
-
 @views.route('/topmovers')
 def top_movers():
     session = db_connect()
@@ -68,18 +65,13 @@ def top_movers():
                             models.model_name,
                             percentile_cont(0.50) within group (order by price) as price
                             from listings INNER JOIN models ON listings.model_name = models.model_name
-                            where status = 'Sold' and extract(year from completion_date) BETWEEN 2021 AND 2022
+                            where status = 'Sold' and extract(year from completion_date) BETWEEN 2017 AND 2022
                             group by make, models.model_name, auctionyear
                             order by models.model_name ASC, auctionyear DESC) subquery) subquery1
                     """, session.connection())
 
     session.close()
     return render_template('topmovers.html', df_increase_data=df_increase_data)
-
-
-
-
-
 
 @views.route('/makes')
 def list_makes():
