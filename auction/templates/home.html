@@ -39,10 +39,9 @@
       plugins: {
         tooltip: {
           callbacks: {
-            label: function(context) {
-              var label = ` Median price: $${context.dataset.data[context.dataIndex]} (based on ${listingcount[context.dataIndex]} listings)`;
-              return label;
-            }
+            label: ((context) => {
+              return ` Median price: $${context.dataset.data[context.dataIndex]} based on ${listingcount[context.dataIndex]} listings`;
+            })
           }
         },
         legend: {

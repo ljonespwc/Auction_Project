@@ -92,13 +92,15 @@ def draw_chart():
                             order by auctionyear ASC
                         """ % make, session.connection())
 
+        listings_by_year = df['listingcount'].values.astype(int).tolist()
         auctionyear = df['auctionyear'].astype(int).values.tolist() # chart x-axis
         price = df['price'].values.astype(int).tolist() # chart y-axis
         supporting_data = df.reset_index()[['auctionyear', 'listingcount']].values.astype(int).tolist()
         
         session.close()
         return render_template('chart.html', make=make, auctionyear=auctionyear, price=price,
-                               supporting_data=supporting_data, dropdown_data=dropdown_data)
+                               supporting_data=supporting_data, dropdown_data=dropdown_data,
+                               listings_by_year=listings_by_year)
     
     else: # if model is selected from dropdown on chart page, show model data
 
@@ -113,6 +115,7 @@ def draw_chart():
                             order by auctionyear ASC
                         """ % model, session.connection())
 
+        listings_by_year = df['listingcount'].values.astype(int).tolist()
         auctionyear = df['auctionyear'].astype(int).values.tolist() # chart x-axis
         price = df['price'].values.astype(int).tolist() # chart y-axis
         
@@ -153,25 +156,21 @@ def draw_chart():
         
         # get additional details and rankings for above table
         df_rankings = pd.read_sql("""
-                            SELECT increase, increase_rank, views, views_rank, comments, comments_rank
+                            SELECT increase, increase_rank
                             FROM rankings
                             WHERE model_name = '%s'
                             """ % model, session.connection())
         
         increase = df_rankings['increase'].item()
         increase_rank = df_rankings['increase_rank'].item()
-        views = df_rankings['views'].item()
-        views_rank = df_rankings['views_rank'].item()
-        comments = df_rankings['comments'].item()
-        comments_rank = df_rankings['comments_rank'].item()
     
         session.close()
         return render_template('chart.html', make=make, model=model, auctionyear=auctionyear, price=price,
                                supporting_data=supporting_data, dropdown_data=dropdown_data, increase=increase,
-                               increase_rank=increase_rank, views=views, views_rank=views_rank, comments=comments,
-                               comments_rank=comments_rank, models_num=models_num, auctionyear_manual=auctionyear_manual,
+                               increase_rank=increase_rank, models_num=models_num, auctionyear_manual=auctionyear_manual,
                                price_manual=price_manual, listings_manual=listings_manual, listings_low_mileage=listings_low_mileage,
-                               auctionyear_low_mileage=auctionyear_low_mileage, price_low_mileage=price_low_mileage)
+                               auctionyear_low_mileage=auctionyear_low_mileage, price_low_mileage=price_low_mileage,
+                               listings_by_year=listings_by_year)
 
 def db_connect():
     DATABASE_URI = os.getenv("DATABASE_URI")

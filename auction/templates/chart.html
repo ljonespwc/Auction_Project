@@ -3,41 +3,40 @@
 
 {% block content %}
 <canvas id="myChart"></canvas>
-<script>
-  var showDataManual = false;
-  var showDataLow = false;
-</script>
 
 {% if model %}
   {% if auctionyear|length == auctionyear_manual|length %}
-    <button onclick="addDatasetManual()">Manual transmission</button>
+    <button id="manual" onclick="addDatasetManual()">Manuals only</button>
   {% endif %}
   {% if auctionyear|length == auctionyear_low_mileage|length %}
-    <button onclick="addDatasetLow()">Low mileage</button>
+    <button id="low" onclick="addDatasetLow()">Low mileage</button>
   {% endif %}
 {% endif %}
 
 <script>
   var auctionyear = {{auctionyear|safe}};
   var price = {{price|safe}};
+  var showDataManual = false;
+  var showDataLow = false;
 
   {% if model %}
-  var make = {{model|tojson}};
-  var auctionyear_manual = {{auctionyear_manual|safe}};
-  var price_manual = {{price_manual|safe}};
-  var auctionyear_low_mileage = {{auctionyear_low_mileage|safe}};
-  var price_low_mileage = {{price_low_mileage|safe}};
+    var make = {{model|tojson}};
+    var auctionyear_manual = {{auctionyear_manual|safe}};
+    var price_manual = {{price_manual|safe}};
+    var auctionyear_low_mileage = {{auctionyear_low_mileage|safe}};
+    var price_low_mileage = {{price_low_mileage|safe}};
+    var listings_by_year = {{listings_by_year|safe}};
   {% else %}
-  var make = {{make|tojson}};
+    var listings_by_year = {{listings_by_year|safe}};
+    var make = {{make|tojson}};
   {% endif %}
 
   const labels = auctionyear;
-
   const data = {
     labels: auctionyear,
     datasets: [
         {
-          label: make + ' - All',
+          label: make + ' (all)',
           data: price,
           fill: false,
           borderColor: 'rgb(75, 192, 192)',
@@ -54,10 +53,23 @@
       plugins: {
         tooltip: {
           callbacks: {
-            label: function(context) {
-              var label = ` Median price: $${context.dataset.data[context.dataIndex]}`;
-              return label;
-            }
+            label: ((context) => {
+              if (context.datasetIndex === 0) {
+                return ` Median price (all): $${context.dataset.data[context.dataIndex]} based on ${listings_by_year[context.dataIndex]} listings`;
+              }
+              if (context.datasetIndex === 1 && showDataManual == true) {
+                return ` Median price (${context.dataset.label}): $${context.dataset.data[context.dataIndex]}`;
+              }
+              if (context.datasetIndex === 1 && showDataLow == true) {
+                return ` Median price (${context.dataset.label}): $${context.dataset.data[context.dataIndex]}`;
+              }
+              if (context.datasetIndex === 2 && showDataManual == true) {
+                return ` Median price (${context.dataset.label}): $${context.dataset.data[context.dataIndex]}`;
+              }
+              if (context.datasetIndex === 2 && showDataLow == true) {
+                return ` Median price (${context.dataset.label}): $${context.dataset.data[context.dataIndex]}`;
+              }
+            })
           }
         },
         legend: {
@@ -118,7 +130,7 @@
 
   function addDatasetManual(){
     const newDataset = {
-      label: 'Manuals Only',
+      label: 'manuals',
       data: price_manual,
       fill: false,
       borderColor: 'rgb(75, 192, 0)',
@@ -126,6 +138,7 @@
       tension: 0.2
     };
     if (showDataManual == false) {
+      document.getElementById("manual").disabled = true;
       myChart.data.datasets.push(newDataset);
       myChart.update();
     }
@@ -134,7 +147,7 @@
 
   function addDatasetLow(){
     const newDataset1 = {
-      label: 'Low Miles Only',
+      label: 'low mileage',
       data: price_low_mileage,
       fill: false,
       borderColor: 'rgb(75, 0, 192)',
@@ -142,6 +155,7 @@
       tension: 0.2
     };
     if (showDataLow == false) {
+      document.getElementById("low").disabled = true;
       myChart.data.datasets.push(newDataset1);
       myChart.update();
     }
@@ -163,19 +177,15 @@
   {% if model %}
   Price change since {{ supporting_data[0][0] }}: {% if increase > 0 %}+{% else %}{% endif %}{{ increase }}%<br>
   Rank: #{{ increase_rank }} of {{ models_num }} models<p><p>
-  Average views per auction: {{ views }}<br>
-  Rank for views: #{{ views_rank }} of {{ models_num }}<p><p>
-  Average comments per auction: {{ comments }}<br>
-  Rank for comments: #{{ comments_rank }} of {{ models_num }}<p><p>
   {% endif %}
   <table class="table table-striped">
     <thead>
     <tr>
         <th scope="col">Auction Year</th>
         {% if model %}
-          <th scope="col">Auctions: {{ model }} - All</th>
+          <th scope="col">Auctions: {{ model }} (all)</th>
         {% else %}
-          <th scope="col">Auctions: {{ make }} - All</th>
+          <th scope="col">Auctions: {{ make }} (all)</th>
         {% endif %}
     </tr>
     </thead>
